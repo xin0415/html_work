@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--  <script src="../d3.min.js"></script> Use D3 library from CDN -->
+     <script src="https://d3js.org/d3.v4.min.js"></script>
+     <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1><center> CSE332 Lab2 </center></h1>
+
+<button onclick="educationFunction()">Education Rate</button><p></p>
+<div id="id2" style="display:none">
+  <p> Pick a value from Education Rate Data Set</p>
+  <a href="high.html">High school graduate</a>
+  <a href="bachelor.html">Bachelor's degree</a>
+  <a href="advanced.html">Advanced degree</a>
+</div>
+<button onclick="unemployFunction()",style="block">Unemployed Rate</button><p></p>
+<div id="id1" style="display:none">
+  <p> Pick a value from Unemployed Rate Data Set</p>
+  <a href="labor.html">Labor Force</a>
+  <a href="employ.html">Employed</a>
+  <a href="unemploy.html">Unemployed</a>
+  <a href="unemployrate.html">Unemployment Rate</a>
+</div>
+<p></p>
+
+<svg width="1400" height="600"></svg>
+
+<script>
+  function unemployFunction(){
+    var x = document.getElementById("id1");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+  }
+  function educationFunction(){
+    var x = document.getElementById("id2");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+  }
+
+</script>
+</body>
+</html>

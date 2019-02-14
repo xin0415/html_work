@@ -1,0 +1,60 @@
+body{
+  margin: 0;
+  background: #55d6aa;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 300;
+}
+.myclass{
+   color:red
+}
+
+.error {
+   color: blue
+}
+/*dropdown button setup*/
+.dropbtn {
+   background-color: #4CAF50;
+   color: white;
+   padding: 16px;
+   font-size: 16px;
+}
+
+.dropdown {
+   position: relative;
+   display: inline-block;
+}
+
+.dropdown-content {
+   display: none;
+   position: absolute;
+   background-color: #f1f1f1;
+   min-width: 160px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
+.dropdown-content a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+svg rect {
+    fill: orange;
+}
+
+svg text {
+    fill:white;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+.bar {
+    fill: orange;
+}
+
+.highlight {
+    fill: steelblue;
+}

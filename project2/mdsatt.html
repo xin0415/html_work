@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MDS Scatterplot Example</title>
+<style>
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+}
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+text {
+    font-size : 12px;
+}
+.axis text {
+    font-size: 10px;
+}
+circle {
+    stroke: #1f77b4;
+    fill : #1f77b4;
+}
+</style>
+</head>
+
+<body>
+  <h1><center> CSE332 Lab 3 </center></h1>
+
+<!-- <form> -->
+<input type="button" value="Bivariate Scatterplot" onclick="window.location.href='index.html'" />
+<input type="button" value="Correlation Matrix" onclick="window.location.href='test1.html'" />
+<input type="button" value="Scatter Plot Matrix" onclick="window.location.href='scatterplotmatrix.html'" />
+<input type="button" value="Parallel Coordinates" onclick="window.location.href='parallel.html'" />
+<input type="button" value="MDS(attributes)" onclick="window.location.href='mdsatt.html'" />
+    <div id="cities"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+<script src="js/mds.js"></script>
+<script>
+  d3.csv("data/corrtest.csv", function(error, dat) {
+      if (error) {
+          throw error;
+      }
+
+var labels = ['Area','Year','Month','LaborForce','Employed','Unemployed','UnemploymentRate','AverageLaborForce','AverageEmployed','AverageUnemployed'];
+var data=[];
+for (var i = 0; i < dat.length; i++){
+  var temp=[];
+  for(var j=0;j<labels.length;j++){
+    temp.push(dat[i][labels[j]]);
+  }
+  // console.log(temp);
+  data.push(temp);
+}
+var cityPositions = numeric.transpose(mds.classic(data));
+var w = Math.min(720, document.documentElement.clientWidth - 20),
+    h = w /2;
+mds.drawD3ScatterPlot(d3.select("#cities"),
+    cityPositions[0],
+    cityPositions[1],
+    labels,
+    {
+        w :  Math.min(720, document.documentElement.clientWidth - 20),
+        h : w /2,
+        padding : 37,
+        reverseX : true,
+        reverseY : true,
+    });
+  });
+</script>
+</body>
+</html>

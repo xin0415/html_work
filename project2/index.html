@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--  <script src="../d3.min.js"></script> Use D3 library from CDN -->
+     <script src="https://d3js.org/d3.v4.min.js"></script>
+     <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1><center> CSE332 Lab 3 </center></h1>
+
+<!-- <form> -->
+<input type="button" value="Bivariate Scatterplot" onclick="window.location.href='index.html'" />
+<input type="button" value="Correlation Matrix" onclick="window.location.href='test1.html'" />
+<input type="button" value="Scatter Plot Matrix" onclick="window.location.href='scatterplotmatrix.html'" />
+<input type="button" value="Parallel Coordinates" onclick="window.location.href='parallel.html'" />
+<input type="button" value="MDS(attributes)" onclick="window.location.href='mdsatt.html'" />
+<!-- </form> -->
+<p></p>
+
+<button onclick="educationFunction()">Education Rate</button><p></p>
+<div id="id2" style="display:none">
+  <p> Pick any two value from Education Rate Data Set</p>
+  <form action="/action_page.php">
+  <select>
+  <option value="Highschoolgraduate">High school graduate</option>
+  <option value="Bachelorsdegree">Bachelor's degree</option>
+  <option value="Advanceddegree">Advanced degree</option>
+  <option value="State">States</option>
+</select>
+<select>
+<option value="Highschoolgraduate">High school graduate</option>
+<option value="Bachelorsdegree">Bachelor's degree</option>
+<option value="Advanceddegree">Advanced degree</option>
+<option value="State">States</option>
+</select>
+</form>
+  <input type="button" value="Submit" onclick="checkboxes()">
+
+  <!-- <form action="/action_page.php">
+  <input type="checkbox" name="value1" value="Highschoolgraduate"> High school graduate<br>
+  <input type="checkbox" name="value2" value="Bachelorsdegree"> Bachelor's degree<br>
+  <input type="checkbox" name="value3" value="Advanceddegree"> Advanced degree<br>
+  <input type="checkbox" name="value4" value="State"> States<br>
+  <input type="button" value="Submit" onclick="checkboxes()">
+</form> -->
+  <!-- <input type="submit" value="Submit" onclick="checkboxes()"> -->
+<!-- </form> -->
+</div>
+<p></p>
+<button onclick="unemployFunction()",style="block">Unemployed Rate</button><p></p>
+<div id="id1" style="display:none">
+  <p> Pick any two value from Unemployed Rate Data Set</p>
+  <form action="/action_page.php">
+  <select>
+  <option value="Year">Year</option>
+  <option value="LaborForce">Labor Force</option>
+  <option value="Employed">Employed</option>
+  <option value="Unemployed">Unemployed</option>
+  <option value="UnemploymentRate">UnemploymentRate</option>
+</select>
+<select>
+<option value="Year">Year</option>
+<option value="LaborForce">Labor Force</option>
+<option value="Employed">Employed</option>
+<option value="Unemployed">Unemployed</option>
+<option value="UnemploymentRate">UnemploymentRate</option>
+</select>
+</form>
+  <input type="button" value="Submit" onclick="checkboxes2()">
+  <!-- <form action="/action_page.php">
+  <input type="checkbox" name="value4" value="Year"> Year<br>
+  <input type="checkbox" name="value1" value="LaborForce">Labor Force<br>
+  <input type="checkbox" name="value2" value="Employed">Employed<br>
+  <input type="checkbox" name="value3" value="Unemployed"> Unemployed<br>
+  <input type="checkbox" name="value5" value="UnemploymentRate">Unemployment Rate<br>
+  <input type="button" value="Submit" onclick="checkboxes2()">
+</form> -->
+  <!-- <a href="labor.html">Labor Force</a>
+  <a href="employ.html">Employed</a>
+  <a href="unemploy.html">Unemployed</a>
+  <a href="unemployrate.html">Unemployment Rate</a> -->
+</div>
+<p></p>
+
+<svg width="800" height="800"></svg>
+
+<script>
+var svg = d3.select("svg"),
+    margin = 200,
+    width = svg.attr("width") - margin,
+    height = svg.attr("height") - margin
+  function checkboxes(){
+    var input=document.forms[0];
+      displayscatterplot(input[0].value,input[1].value);
+  }
+  function checkboxes2(){
+    var input=document.forms[1];
+      displayscatterplot2(input[0].value,input[1].value);
+  }
+  function displayscatterplot(xvalue,yvalue){
+    d3.selectAll(".dot").remove();
+    d3.selectAll(".x-axis").remove();
+    d3.selectAll(".y-axis").remove();
+    d3.selectAll(".x-text").remove();
+    var svg = d3.select("svg"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin
+
+    svg.append("text")
+       .attr("transform", "translate(100,0)")
+       .attr("x", 200)
+       .attr("y", 50)
+       .attr("font-size", "24px")
+       .text("Bivariate Scatterplot")
+       // console.log(xvalue);
+    if(xvalue=="State"){
+      var xScale = d3.scaleBand().range([0, width]).padding(0.4);
+    }else{
+        var xScale = d3.scaleLinear().range([0, width]);//scaleBand() is used to construct a band scale. This is useful when our data has discrete bands.
+    }
+    if(yvalue=="State"){
+      var yScale = d3.scaleBand().range([height, 0]).padding(0.4);
+    }else{
+        var yScale = d3.scaleLinear().range([height, 0]);//scaleBand() is used to construct a band scale. This is useful when our data has discrete bands.
+    }
+        // yScale = d3.scaleLinear().range([height, 0]);//a linear scale for the y-axis since this axis will show our stock prices.
+
+    var g = svg.append("g")
+               .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+    d3.csv("data/education.csv", function(error, data) {
+        if (error) {
+            throw error;
+        }
+        if(xvalue=="Advanceddegree"){
+          xScale.domain([0, 20]);
+        }else if(xvalue=="State"){
+          xScale.domain(data.map(function(d) { return d[xvalue]; }));
+        }
+        else{
+            xScale.domain([d3.min(data, function(d) { return d[xvalue]; }), d3.max(data, function(d) { return d[xvalue]; })]); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
+        }
+
+        if(yvalue=="Advanceddegree"){
+          yScale.domain([0, 20]);
+        }else if (yvalue=="State") {
+          yScale.domain(data.map(function(d) { return d[yvalue]; }));
+        }else{
+          yScale.domain([d3.min(data, function(d) { return d[yvalue]; }), d3.max(data, function(d) { return d[yvalue]; })]); // domain value of Fixation Duration to y Scale
+        }
+
+        g.append("g")
+         .attr("class","x-axis")
+         .attr("transform", "translate(0," + height + ")")
+         .call(d3.axisBottom(xScale))
+         .selectAll("text")
+          .style("text-anchor","end")
+          .attr("dx","-.8em")
+          .attr("dy","-1em")
+          .attr("transform",function(d){return "rotate(-90)"});
+
+          g.append("g")
+         .append("text")
+         .attr("class","x-text")
+         .attr("y", 630)
+         .attr("x", width+20)
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text(xvalue);
+
+        g.append("g") //Another group element to have our y-axis grouped under one group element
+        .attr("class","y-axis")
+         .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
+             return  d;
+         })
+         .ticks(10)) //We have also specified the number of ticks we would like our y-axis to have using ticks(10).
+         .append("text")
+         .attr("transform", "rotate(-90)")
+         .attr("y", 6)
+         .attr("dy", "-5.1em")
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text(yvalue);
+
+        g.selectAll(".circle") //created dynamic bars with our data using the SVG rectangle element.
+         .data(data)
+         .enter().append("circle").attr("class","dot")
+         .transition()                 // Keep on changing the place where transition starts and see the difference.
+           .ease(d3.easeLinear)
+           .duration(4)
+           .delay(function (d, i) {
+               return i * 50;
+           })
+        // .attr("class", "bar")
+         .attr("r", function(d) { return 5; })
+
+         .attr("cx", function(d) { return xScale(d[xvalue]); })
+           //x scale created earlier and pass the year value from our data.
+         .attr("cy", function(d) { return yScale(d[yvalue]); })                                                          //the height of the SVG minus the corresponding y-value of the bar from the y-scale
+    });
+  }
+  function displayscatterplot2(xvalue,yvalue){
+    d3.selectAll(".dot").remove();
+    d3.selectAll(".x-axis").remove();
+    d3.selectAll(".y-axis").remove();
+    d3.selectAll(".x-text").remove();
+    var svg = d3.select("svg"),
+        margin = 200,
+        width = svg.attr("width") - margin,
+        height = svg.attr("height") - margin
+
+    svg.append("text")
+       .attr("transform", "translate(100,0)")
+       .attr("x", 200)
+       .attr("y", 50)
+       .attr("font-size", "24px")
+       .text("Bivariate Scatterplot")
+
+    var xScale = d3.scaleLinear().range([0, width]);//scaleBand() is used to construct a band scale. This is useful when our data has discrete bands.
+        yScale = d3.scaleLinear().range([height, 0]);//a linear scale for the y-axis since this axis will show our stock prices.
+
+    var g = svg.append("g")
+               .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+    d3.csv("data/unemployment.csv", function(error, data) {
+        if (error) {
+            throw error;
+        }
+
+        xScale.domain([d3.min(data, function(d) { return d[xvalue]; }), d3.max(data, function(d) { return d[xvalue]; })]); //provide domain values to the x and y scales, here it's X Scale which is Timestamp
+        if(yvalue=="UnemploymentRate"){
+          yScale.domain([0, 10]);
+        }else{
+          yScale.domain([d3.min(data, function(d) { return d[yvalue]; }), d3.max(data, function(d) { return d[yvalue]; })]); // domain value of Fixation Duration to y Scale
+        }
+        g.append("g")
+         .attr("class","x-axis")
+         .attr("transform", "translate(0," + height + ")")
+         .call(d3.axisBottom(xScale))
+         .selectAll("text")
+          .style("text-anchor","end")
+          .attr("dx","-.8em")
+          .attr("dy","-1em")
+          .attr("transform",function(d){return "rotate(-90)"});
+
+          g.append("g")
+         .append("text")
+         .attr("class","x-text")
+         .attr("y", 630)
+         .attr("x", width+20)
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text(xvalue);
+
+        g.append("g") //Another group element to have our y-axis grouped under one group element
+        .attr("class","y-axis")
+         .call(d3.axisLeft(yScale).tickFormat(function(d){ // Try with X Scaling too.
+             return  d;
+         })
+         .ticks(10)) //We have also specified the number of ticks we would like our y-axis to have using ticks(10).
+         .append("text")
+         .attr("transform", "rotate(-90)")
+         .attr("y", 6)
+         .attr("dy", "-5.1em")
+         .attr("text-anchor", "end")
+         .attr("stroke", "black")
+         .text(yvalue);
+
+        g.selectAll(".circle") //created dynamic bars with our data using the SVG rectangle element.
+         .data(data)
+         .enter().append("circle").attr("class","dot")
+         .transition()                 // Keep on changing the place where transition starts and see the difference.
+           .ease(d3.easeLinear)
+           .duration(4)
+           .delay(function (d, i) {
+               return i * 50;
+           })
+        // .attr("class", "bar")
+         .attr("r", function(d) { return 5; })
+
+         .attr("cx", function(d) { return xScale(d[xvalue]); })
+           //x scale created earlier and pass the year value from our data.
+         .attr("cy", function(d) { return yScale(d[yvalue]); })                                                          //the height of the SVG minus the corresponding y-value of the bar from the y-scale
+    });
+  }
+  function displayError(){
+    var x = document.getElementById("mes");
+        x.style.display = "block";
+  }
+  function displayError2(){
+    var x = document.getElementById("mes2");
+        x.style.display = "block";
+  }
+  function unemployFunction(){
+    var x = document.getElementById("id1");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+  }
+  function educationFunction(){
+    var x = document.getElementById("id2");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+  }
+
+</script>
+</body>
+</html>

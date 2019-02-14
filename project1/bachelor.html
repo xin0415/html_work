@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--  <script src="../d3.min.js"></script> Use D3 library from CDN -->
+     <script src="https://d3js.org/d3.v4.min.js"></script>
+     <link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1><center> CSE332 Lab2 </center></h1>
+<!-- <nav>
+  <ul> -->
+    <!-- <li><a href ="#">Education rate</a></li>
+    <li><a href ="#">Jobs</a></li> -->
+<button onclick="educationFunction()">Education Rate</button><p></p>
+<div id="id2" style="display:none">
+  <p> Pick a value from Education Rate Data Set</p>
+  <a href="high.html">High school graduate</a>
+  <a href="bachelor.html">Bachelor's degree</a>
+  <a href="advanced.html">Advanced degree</a>
+</div>
+<button onclick="unemployFunction()">Unemployed Rate</button><p></p>
+    <!-- <li><a href ="unemployFunction()">Unemployment rate</a></li> -->
+  <!-- </ul>
+</nav> -->
+
+<div id="id1" style="display:none">
+  <p> Pick a value from Unemployed Rate Data Set</p>
+  <a href="labor.html">Labor Force</a>
+  <a href="employ.html">Employed</a>
+  <a href="unemploy.html">Unemployed</a>
+  <a href="unemployrate.html">Unemployment Rate</a>
+  <!-- <button onclick="laborFunction()">Labor Force</button>
+  <button onclick="employFunction()">Employed</button>
+  <button onclick="unemFunction()">Unemployed</button>
+  <button onclick="rateFunction()">Unemployment Rate</button> -->
+</div>
+<p id="id1"></p>
+<div class="dropdown">
+  <button class="dropbtn"> Menu</button>
+  <div class= "dropdown-content">
+    <a href="high.html">High school graduate</a>
+    <a href="advanced.html">Advanced degree</a>
+  </div>
+</div>
+<p></p>
+<p>Using the button to next variable of the data set</p>
+<button onclick="location.href='advanced.html'">Next Variable</button><p></p>
+<!-- <div class="tooltip">Hover over me
+  <span class="tooltiptext">Tooltip text</span>
+</div> -->
+<p></p>
+
+<svg width="1400" height="600"></svg>
+
+    <script>
+    function unemployFunction(){
+      var x = document.getElementById("id1");
+      if (x.style.display === "none") {
+          x.style.display = "block";
+      } else {
+          x.style.display = "none";
+      }
+    }
+    function educationFunction(){
+      var x = document.getElementById("id2");
+      if (x.style.display === "none") {
+          x.style.display = "block";
+      } else {
+          x.style.display = "none";
+      }
+    }
+
+          var svg = d3.select("svg"),
+              margin = 200,
+              width = svg.attr("width") - margin,
+              height = svg.attr("height") - margin;
+
+          svg.append("text")
+             .attr("transform", "translate(300,0)")
+             .attr("x", 50)
+             .attr("y", 50)
+             .attr("font-size", "24px")
+             .text("Education Rate")
+
+          var x = d3.scaleBand().range([0, width]).padding(0.1);
+              y = d3.scaleLinear().range([height, 0]);
+
+          var g = svg.append("g")
+                  .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+          d3.csv("data/education.csv", function(error, data) {
+              if (error) {
+                  throw error;
+              }
+
+              x.domain(data.map(function(d) { return d.State; }));
+              y.domain([0, d3.max(data, function(d) { return d.Bachelorsdegree; })]);
+              g.append("g")
+               .attr("transform", "translate(0," + height + ")")
+               .call(d3.axisBottom(x))
+               .selectAll("text")
+                .style("text-anchor","end")
+                .attr("dx","-.8em")
+                .attr("dy","-1em")
+                .attr("transform",function(d){return "rotate(-90)"});
+
+                g.append("g")
+               .append("text")
+               .attr("y", 400)
+               .attr("x", width+20)
+               .attr("text-anchor", "end")
+               .attr("stroke", "black")
+               .text("States");
+
+              g.append("g")
+               .call(d3.axisLeft(y).tickFormat(function(d){
+                   return  d;
+               }).ticks(10))
+               .append("text")
+               .attr("transform", "rotate(-90)")
+               .attr("y",0)
+               .attr("dy", "-5.1em")
+               .attr("text-anchor", "end")
+               .attr("stroke", "black")
+               .text("Bachelor's degree(%)");
+
+              g.selectAll(".bar")
+               .data(data)
+               .enter().append("rect")
+               .attr("class", "bar")
+               .on("mouseover", onMouseOver) //On selection of bar elements, two new event handlers added, viz. mouseover and mouseout and we are calling the respective functions to handle mouse events
+               .on("mouseout", onMouseOut)   //done to apply animation when mouse hovers over a particular bar and goes out
+               .attr("x", function(d) { return x(d.State); })
+               .attr("y", function(d) { return y(d.Bachelorsdegree); })
+               .attr("width", x.bandwidth()-10)
+               .transition()
+               .ease(d3.easeLinear)
+               .delay(function (d, i) {
+                   return i * 50;
+               })
+               .attr("height", function(d) { return height - y(d.Bachelorsdegree); });
+          });
+
+          function onMouseOver(d, i) {
+              d3.select(this).attr('class', 'highlight');  //selected bar (given by the 'this' object)
+              d3.select(this)
+                .transition()     // adds animation
+                .duration(400)
+                .attr('width', x.bandwidth() -5)
+                .attr("y", function(d) { return y(d.Bachelorsdegree) - 10; })
+                .attr("height", function(d) { return height - y(d.Bachelorsdegree) + 10; });
+
+              g.append("text")
+               .attr('class', 'val')
+               .attr('x', function() {
+                   return x(d.State)+20;
+               })
+               .attr('y', function() {
+                   return y(d.Bachelorsdegree) - 15;
+               })
+               .text(function() {
+                   return [+d.Bachelorsdegree];  // Value of the text
+               });
+          }
+
+          //mouseout event handler function
+          function onMouseOut(d, i) {
+              // use the text label class to remove label on mouseout
+              d3.select(this).attr('class', 'bar');
+              d3.select(this)
+                .transition()     // adds animation
+                .duration(400)
+                .attr('width', x.bandwidth()-10)
+                .attr("y", function(d) { return y(d.Bachelorsdegree); }) // What if we don't again fix this Value ?
+                .attr("height", function(d) { return height - y(d.Bachelorsdegree); }); // Play with changing the Value
+
+              d3.selectAll('.val')
+                .remove()
+          }
+
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+body{
+  margin: 0;
+  background: #ffffff;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 300;
+}
+.myclass{
+   color:red
+}
+
+.error {
+   color: blue
+}
+/*dropdown button setup*/
+.dropbtn {
+   background-color: #4CAF50;
+   color: white;
+   padding: 16px;
+   font-size: 16px;
+}
+
+.dropdown {
+   position: relative;
+   display: inline-block;
+}
+
+.dropdown-content {
+   display: none;
+   position: absolute;
+   background-color: #f1f1f1;
+   min-width: 160px;
+   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+   z-index: 1;
+}
+
+.dropdown-content a {
+   color: black;
+   padding: 12px 16px;
+   text-decoration: none;
+   display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+/* svg rect {
+    fill: orange;
+} */
+
+svg text {
+    fill:black;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+.bar {
+    fill: orange;
+}
+.highlightcir {
+    fill: blue;
+}
+
+.highlight {
+    fill: steelblue;
+}
+.axis,
+.frame {
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke: #ddd;
+}
+
+.axis path {
+  display: none;
+}
+
+.cell text {
+  font-weight: black;
+  text-transform: capitalize;
+}
+
+.frame {
+  fill: none;
+  stroke: #aaa;
+}
+
+circle {
+  /* fill: #000; */
+  fill: black;
+  fill-opacity: 20;
+}
+.circle1 {
+  /* fill: #000; */
+  fill-opacity: 0;
+}
+
+circle.hidden {
+  fill: #ccc !important;
+}
+
+.extent {
+  fill: #000;
+  fill-opacity: .125;
+  stroke: #fff;
+}
+.parcoords > canvas {
+  font: 14px sans-serif;
+  position: absolute;
+}
+.parcoords > canvas {
+  pointer-events: none;
+}
+.parcoords text.label {
+  /* color: black; */
+  cursor: default;
+}
+.parcoords rect.background:hover {
+  fill: #55d6aa;
+}
+.parcoords canvas {
+  opacity: 1;
+  transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+}
+.parcoords canvas.faded {
+  opacity: 0.25;
+}
+/* body {
+  font-size: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  text-align: center;
+} */
+
+#title {
+  font-size: 20px;
+  padding-bottom: 10px;
+  padding-top: 20px;
+  font-weight: 300;
+}
+
+#explanation {
+  font-size: 12px;
+  max-width: 620px;
+  margin: 0 auto;
+  padding-top: 10px;
+  color: #ababab;
+  font-weight: 300;
+}
+
+.y.axis line {
+  fill: none;
+}
+
+.x.axis line {
+  fill: none;
+  stroke: #e0e0e0;
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  display: none;
+}
+
+.brush .extent {
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.resize {
+  display: inline !important; /* show when empty */
+  fill: #7A7A7A;
+  fill-opacity: 1;
+  stroke: #7A7A7A;
+  stroke-width: 2px;
+}
+
+.bar {
+  /*shape-rendering: crispEdges;*/
+}
+.area {
+  fill: steelblue;
+  clip-path: url(#clip);
+}
+
+.zoom {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}

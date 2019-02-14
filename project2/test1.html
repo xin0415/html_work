@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Correlation Matrix</title>
+    <link href="css/test.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+</head>
+<body>
+	<h1><center> CSE332 Lab 3 </center></h1>
+
+<!-- <form> -->
+<input type="button" value="Bivariate Scatterplot" onclick="window.location.href='index.html'" />
+<input type="button" value="Correlation Matrix" onclick="window.location.href='test1.html'" />
+<input type="button" value="Scatter Plot Matrix" onclick="window.location.href='scatterplotmatrix.html'" />
+<input type="button" value="Parallel Coordinates" onclick="window.location.href='parallel.html'" />
+<input type="button" value="MDS(attributes)" onclick="window.location.href='mdsatt.html'" /><p></p>
+    <div style="display:inline-block;" id="legend"></div>
+    <div style="display:inline-block; float:left" id="container"></div>
+	<script src="js/main.js"></script>
+
+	<script>
+  d3.csv("data/corrtest.csv", function(error, dat){
+    if (error) {
+        throw error;
+    }
+
+		// console.log(correlationMatrix);
+    var labels = ['Area','Year','Month','LaborForce','Employed','Unemployed','UnemploymentRate','AverageLaborForce','AverageEmployed','AverageUnemployed'];
+		// var labels=['Student Enrollment','Percent White','Percent Black','Percent Hispanic','Percent Asian','Average Score (SAT Math)','Average Score (SAT Reading)','Average Score (SAT Writing)','Percent Tested','Total'];
+		var data=[];
+		for (var i = 0; i < dat.length; i++){
+			var temp=[];
+			for(var j=0;j<labels.length;j++){
+				temp.push(dat[i][labels[j]]);
+			}
+			// console.log(temp);
+			data.push(temp);
+		}
+		// console.log(data);
+    Matrix({
+        container : '#container',
+        data      : data,
+        labels    : labels,
+        start_color : '#FF0000',
+        end_color : '#3498db'
+    });
+});
+</script>
+</body>
