@@ -1,4 +1,4 @@
-# html_work
+# Visualization
 tool using:atom, d3.js
 
 This program is using d3.js to visualize the data from csv file.
